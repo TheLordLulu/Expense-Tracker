@@ -8,14 +8,14 @@ const BASE_URL = "http://localhost:8080/api/v1/";
 const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
-
+    const [user, setUser] = useState(null);
     const [incomes, setIncomes] = useState([])
     const [expenses, setExpenses] = useState([])
     const [error, setError] = useState(null)
 
     //calculate incomes
     const addIncome = async (income) => {
-        const response = await axios.post(`${BASE_URL}incomes`, income)
+        const response = await axios.post(`${BASE_URL}incomes/`, income)
             .catch((err) =>{
                 setError(err.response.data.message)
             })
@@ -23,7 +23,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     const getIncomes = async () => {
-        const response = await axios.get(`${BASE_URL}incomes/get`)
+        const response = await axios.get(`${BASE_URL}incomes`)
         setIncomes(response.data)
         console.log(response.data)
     }
@@ -44,7 +44,25 @@ export const GlobalProvider = ({children}) => {
 
         return totalIncome;
     }
+    const getIncomeByCategory = async (category) => {
+        try {
+          const response = await axios.get(`${BASE_URL}incomes/category=${category}`);
+          setIncomes(response.data);
+          console.log(response.data);
+        } catch (error) {
+          setError(error.response.data.message);
+        }
+      };
 
+    const updateIncome = async (id, incomeDetail) => {
+        try {
+          const response = await axios.put(`${BASE_URL}incomes/update/${id}`, incomeDetail);
+          getIncomes();
+          console.log(response.data);
+        } catch (error) {
+          setError(error.response.data.message);
+        }
+      };
 
     //calculate expenses
     const addExpense = async (expense) => {
@@ -56,7 +74,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     const getExpenses = async () => {
-        const response = await axios.get(`${BASE_URL}expenses/get`)
+        const response = await axios.get(`${BASE_URL}expenses`)
         setExpenses(response.data)
         console.log(response.data)
     }
@@ -90,6 +108,10 @@ export const GlobalProvider = ({children}) => {
     }
 
 
+    const updateUser = (userData) => {
+        setUser(userData);
+      };
+
     return (
         <GlobalContext.Provider value={{
             addIncome,
@@ -99,13 +121,18 @@ export const GlobalProvider = ({children}) => {
             expenses,
             totalIncome,
             addExpense,
+            updateIncome,
+            getIncomeByCategory,
             getExpenses,
             deleteExpense,
             totalExpenses,
             totalBalance,
             transactionHistory,
             error,
-            setError
+            setError,
+            user, 
+            updateUser
+
         }}>
             {children}
         </GlobalContext.Provider>
