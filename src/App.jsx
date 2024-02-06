@@ -7,10 +7,12 @@ import Navigation from './components/Navigation/Navigation';
 import Dashboard from './components/Dashboard/Dashboard';
 import Income from './components/Income/Income';
 import Expenses from './components/Expenses/Expenses';
-import SignInSide from './components/Login/SignInSide'; 
+import SignInSide from './components/Login/SignInSide';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 import { auth } from "./firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useGlobalContext } from './context/globalContext';
+import SignUp from './components/Signup/SignUp';
 
 function App() {
   const [active, setActive] = useState(1);
@@ -21,7 +23,7 @@ function App() {
       // Update the user in the global context
       global.updateUser(user);
     });
-  
+
     return () => unsubscribe();
   }, [global]);
 
@@ -50,12 +52,21 @@ function App() {
         {orbMemo}
         <MainLayout>
           {global.user ? (
-            <>
+            <Router>
               <Navigation active={active} setActive={setActive} />
-              <main>{displayData()}</main>
-            </>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/income" element={<Income />} />
+                <Route path="/expenses" element={<Expenses />} />
+              </Routes>
+            </Router>
           ) : (
-            <SignInSide />
+            <Router>
+              <Routes>
+                <Route path="/sign-in" element={<SignInSide />} />
+                <Route path="/sign-up" element={<SignUp />} />
+              </Routes>
+            </Router>
           )}
         </MainLayout>
       </AppStyled>
@@ -63,22 +74,22 @@ function App() {
   );
 }
 
-
 const AppStyled = styled.div`
   height: 100vh;
   background-image: url(${props => props.bg});
   position: relative;
-  main{
+  main {
     flex: 1;
     background: rgba(252, 246, 249, 0.78);
     border: 3px solid #FFFFFF;
     backdrop-filter: blur(4.5px);
     border-radius: 32px;
     overflow-x: hidden;
-    &::-webkit-scrollbar{
+    &::-webkit-scrollbar {
       width: 0;
     }
   }
 `;
 
-export default App
+export default App;
+
