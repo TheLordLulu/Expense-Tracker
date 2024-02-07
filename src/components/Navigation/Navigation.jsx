@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import avatar from "../../img/avatar.png";
+import avatar from "../../img/Bobby.png";
 import { signout } from "../../utils/Icons";
 import { menuItems } from "../../utils/menuItems";
 import { signOut } from "firebase/auth";
@@ -50,7 +50,7 @@ const NavStyled = styled.nav`
   padding: 2rem 1.5rem;
   width: 374px;
   height: 100%;
-  background: rgba(252, 246, 249, 0.78);
+  background: rgba(59, 88, 143, 0.78);
   border: 3px solid #ffffff;
   backdrop-filter: blur(4.5px);
   border-radius: 32px;
@@ -74,10 +74,10 @@ const NavStyled = styled.nav`
       box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.06);
     }
     h2 {
-      color: rgba(34, 34, 96, 1);
+      color: rgb(255, 255, 255);
     }
     p {
-      color: rgba(34, 34, 96, 0.6);
+      color: rgb(255, 255, 255);
     }
   }
 
@@ -93,11 +93,11 @@ const NavStyled = styled.nav`
       font-weight: 500;
       cursor: pointer;
       transition: all 0.4s ease-in-out;
-      color: rgba(34, 34, 96, 0.6);
+      color: rgb(255, 255, 255);
       padding-left: 1rem;
       position: relative;
       i {
-        color: rgba(34, 34, 96, 0.6);
+        color: rgb(255, 255, 255);
         font-size: 1.4rem;
         transition: all 0.4s ease-in-out;
       }
@@ -106,6 +106,7 @@ const NavStyled = styled.nav`
 
   .bottom-nav {
     cursor: pointer;
+    color: rgb(255, 255, 255);
   }
   
 

@@ -38,9 +38,9 @@ function Expenses() {
                   description={description}
                   amount={amount}
                   date={date}
-                  type="expense" // Make sure to pass the correct type
+                  type="expense" 
                   category={category}
-                  indicatorColor="red" // Assuming you want expenses to be red
+                  indicatorColor="red" 
                   deleteItem={deleteExpense}
                 />
               );

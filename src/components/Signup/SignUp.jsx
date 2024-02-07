@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { auth } from "../../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link as RouterLink} from 'react-router-dom';
-// import { useHistory } from "react-router-dom";
+
 
 
 
@@ -23,7 +23,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  // const history = useHistory();
+
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -31,8 +31,7 @@ function SignUp() {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      // You can redirect to a different page upon successful signup
-      // history.push("/src/components/Login/SignInSide.jsx");
+     
     } catch (error) {
       setError(error.message);
     }
@@ -128,7 +127,7 @@ function SignUp() {
               )}
               <Grid container>
                 <Grid item>
-                  <RouterLink to="/sign-in" variant="body2">
+                  <RouterLink to="../Login/SignInSide.jsx" variant="body2">
                     {"Already have an account? Sign In"}
                   </RouterLink>
                 </Grid>

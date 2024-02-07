@@ -12,18 +12,18 @@ import { auth } from "./firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useGlobalContext } from './context/globalContext';
 import TransactionHistory from './History/TransactionHistory';
-import Loader from './components/Loader/FullPageLoader'; // Import Loader component
+import Loader from './components/Loader/FullPageLoader';
 
 function App() {
   const [active, setActive] = useState(1);
-  const [loading, setLoading] = useState(true); // State to track loading status
+  const [loading, setLoading] = useState(true); 
   const global = useGlobalContext();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       // Update the user in the global context
       global.updateUser(user);
-      setLoading(false); // Set loading to false once data is fetched
+      setLoading(false); 
     });
   
     return () => unsubscribe();
@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div>
-      {/* Conditionally render Loader component while loading */}
+ 
       {loading ? (
         <Loader bg={bg} />
       ) : (
@@ -78,7 +78,7 @@ const AppStyled = styled.div`
   position: relative;
   main {
     flex: 1;
-    background: rgba(252, 246, 249, 0.78);
+    background: rgba(59, 88, 143, 0.78);
     border: 3px solid #FFFFFF;
     backdrop-filter: blur(4.5px);
     border-radius: 32px;

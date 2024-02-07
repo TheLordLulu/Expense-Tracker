@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useGlobalContext } from '../context/globalContext';
 import { useState } from "react";
+import Loader from '../components/Loader/FullPageLoader';
 import {
   money,
   freelance,
@@ -20,11 +21,19 @@ import {
 } from '../utils/Icons';
 
 function TransactionHistory() {
-    const { transactionHistory, getIncomeByCategory, getExpenseByCategory } = useGlobalContext();
+    const { transactionHistory, getIncomes, getExpenses, getIncomeByCategory, getExpenseByCategory } = useGlobalContext();
     const [selectedCategory, setSelectedCategory] = useState('');
     const [transactionType, setTransactionType] = useState('');
+    const [loading, setLoading] = useState(true);
   
     const history = transactionHistory();
+  
+    useEffect(() => {
+     
+      getIncomes();
+      getExpenses();
+      setLoading(false);
+    }, []);
   
     const categoryIcon = (category) => {
       switch (category) {
@@ -73,34 +82,38 @@ function TransactionHistory() {
     };
   
     const handleCategoryChange = (e) => {
-        const category = e.target.value;
-        setSelectedCategory(category);
-        if (transactionType === 'income') {
-          if (category === '') {
-            getIncomes();
-          } else {
-            getIncomeByCategory(category);
-          }
-        } else if (transactionType === 'expense') {
-          if (category === '') {
-            getExpenses();
-          } else {
-            getExpenseByCategory(category);
-          }
+      const category = e.target.value;
+      setSelectedCategory(category);
+      if (transactionType === 'income') {
+        if (category === '') {
+          getIncomes();
+        } else {
+          getIncomeByCategory(category);
         }
-      };
-  
-    const handleTransactionTypeChange = (e) => {
-      const type = e.target.value;
-      setTransactionType(type);
-      if (type === 'income' && selectedCategory) {
-        getIncomeByCategory(selectedCategory);
-      } else if (type === 'expense' && selectedCategory) {
-        getExpenseByCategory(selectedCategory);
-      } else {
-        setSelectedCategory('');
+      } else if (transactionType === 'expense') {
+        if (category === '') {
+          getExpenses();
+        } else {
+          getExpenseByCategory(category);
+        }
       }
     };
+  
+    const handleTransactionTypeChange = (e) => {
+  const type = e.target.value;
+  setTransactionType(type);
+  setSelectedCategory('');
+  
+  if (type === 'income') {
+    getIncomes();
+  } else if (type === 'expense') {
+    getExpenses();
+  }
+};
+  
+    if (loading) {
+      return <Loader bg="white" />;
+    }
   
     return (
       <HistoryStyled>
