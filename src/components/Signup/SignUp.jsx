@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,54 +13,32 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { auth } from "../../firebase/config";
-import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Link as RouterLink} from 'react-router-dom';
+// import { useHistory } from "react-router-dom";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Lulu's Expense Tracker
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
-
-export default function SignInSide() {
-  const [userCredentials, setuserCredentials] = useState({});
-  const [error, setError] = useState("");
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  // const history = useHistory();
 
-  const handleLogin = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     setError("");
 
-    signInWithEmailAndPassword(auth, email, password).catch((error) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      // You can redirect to a different page upon successful signup
+      // history.push("/src/components/Login/SignInSide.jsx");
+    } catch (error) {
       setError(error.message);
-    });
+    }
   };
+
+  const defaultTheme = createTheme();
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -97,12 +75,12 @@ export default function SignInSide() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Sign Up
             </Typography>
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSignUp}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -114,6 +92,7 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
 
@@ -125,7 +104,8 @@ export default function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
 
@@ -137,24 +117,22 @@ export default function SignInSide() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={(e) => handleLogin(e)}
+                sx={{ mt: 1, mb: 2 }}
               >
-                Sign In
+                Sign Up
               </Button>
+              {error && (
+                <Typography variant="body2" color="error">
+                  {error}
+                </Typography>
+              )}
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
-                  <Link href="/sign-up" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                  <RouterLink to="/sign-in" variant="body2">
+                    {"Already have an account? Sign In"}
+                  </RouterLink>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>
@@ -162,3 +140,5 @@ export default function SignInSide() {
     </ThemeProvider>
   );
 }
+
+export default SignUp;

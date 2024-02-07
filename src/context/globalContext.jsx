@@ -29,9 +29,15 @@ export const GlobalProvider = ({children}) => {
     }
 
     const deleteIncome = async (id) => {
-        console.log('Deleting income with ID:', id);
-        const res = await axios.delete(`${BASE_URL}incomes/delete/${id}`);
-        getIncomes();
+        try {
+            console.log('Deleting income with ID:', id);
+            const res = await axios.delete(`${BASE_URL}incomes/delete/${id}`);
+            console.log('Income deleted successfully');
+            getIncomes();
+        } catch (error) {
+            console.error('Error deleting income:', error);
+            // Handle error (e.g., display error message to user)
+        }
     }
     
     
@@ -46,7 +52,7 @@ export const GlobalProvider = ({children}) => {
     }
     const getIncomeByCategory = async (category) => {
         try {
-          const response = await axios.get(`${BASE_URL}incomes/category=${category}`);
+          const response = await axios.get(`${BASE_URL}incomes/category?category=${category}`);
           setIncomes(response.data);
           console.log(response.data);
         } catch (error) {
@@ -93,6 +99,15 @@ export const GlobalProvider = ({children}) => {
         return totalExpense;
     }
 
+    const getExpenseByCategory = async (category) => {
+        try {
+          const response = await axios.get(`${BASE_URL}expenses/category?category=${category}`);
+          setExpenses(response.data);
+          console.log(response.data);
+        } catch (error) {
+          setError(error.response.data.message);
+        }
+      };
 
     const totalBalance = () => {
         return totalIncome() - totalExpenses()
@@ -123,6 +138,7 @@ export const GlobalProvider = ({children}) => {
             addExpense,
             updateIncome,
             getIncomeByCategory,
+            getExpenseByCategory,
             getExpenses,
             deleteExpense,
             totalExpenses,

@@ -26,14 +26,14 @@ function Expenses() {
           </div>
           <div className="incomes">
             {expenses.map((income) => {
-              const { _id, title, amount, date, category, description, type } =
+              const { id, title, amount, date, category, description, type } =
                 income;
               console.log(income);
               // Inside the map function in Expenses component
               return (
                 <IncomeItem
-                  key={_id}
-                  id={_id}
+                  key={id}
+                  id={id}
                   title={title}
                   description={description}
                   amount={amount}
